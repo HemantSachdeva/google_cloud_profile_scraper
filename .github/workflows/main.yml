@@ -1,0 +1,39 @@
+name: Google Cloud Profile Badges Scraper
+on:
+  # Schedule the workflow to run on an interval of 5 hours
+  schedule:
+   - cron: "0 */5 * * *"
+  workflow_dispatch:
+  push:
+      branches:
+             - main
+  pull_request:
+      branches:
+             - main
+
+jobs:
+    google-cloud-profile-badges-scraper:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  ref: dumps # checkout dumps branch
+            - name: Set Timezone # Set timezone to IST for logs file
+              uses: szenius/set-timezone@v1.0
+              with:
+                timezoneLinux: "Asia/Kolkata"
+            - name: Set up Python 3.10
+              uses: actions/setup-python@v2
+              with:
+                  python-version: 3.10.0
+            - name: Install dependencies
+              run: pip install -r requirements.txt
+            - name: Run the scraper
+              run: bash scripts/scrape.sh
+            - name: Commit changes
+              run: |
+                  git config user.email "hemant.evolver@gmail.com"
+                  git config user.name "Hemant Sachdeva"
+                  git add -A
+                  git commit -m "Update badges"
+                  git push origin dumps
