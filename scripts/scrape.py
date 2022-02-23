@@ -1,3 +1,6 @@
+from dataclasses import replace
+from re import sub
+
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -27,6 +30,10 @@ for row in data.itertuples():
             d["badges"] += f"{title}, "
 
     rows.append(d)
+
+for row in rows:
+    # remove trailing comma with a space
+    row["badges"] = sub(pattern=", $", repl="", string=row["badges"])
 
 header = ["Name", "Badges"]
 df = pd.DataFrame.from_dict(rows)
