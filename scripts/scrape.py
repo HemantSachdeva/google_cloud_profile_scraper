@@ -31,8 +31,14 @@ for row in data.itertuples():
     rows.append(d)
 
 for row in rows:
-    row["badges"] = sub(", $", "", row["badges"])  # remove trailing comma
+    # remove trailing comma with a space
+    row["badges"] = sub(pattern=", $", repl="", string=row["badges"])
+    # count of badges to be earned yet
+    if len(row["badges"]):
+        row["badges_left"] = len(VALID_BADGES) - len(row["badges"].split(","))
+    else:
+        row["badges_left"] = 4
 
-header = ["Name", "Badges"]
+header = ["Name", "Badges", "Badges left count"]
 df = pd.DataFrame.from_dict(rows)
 df.to_csv(path_or_buf="data/output.csv", header=header)
