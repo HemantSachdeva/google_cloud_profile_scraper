@@ -34,7 +34,10 @@ for row in rows:
     # remove trailing comma with a space
     row["badges"] = sub(pattern=", $", repl="", string=row["badges"])
     # count of badges to be earned yet
-    row["badges_left"] = len(VALID_BADGES) - len(row["badges"].split(","))
+    if len(row["badges"]):
+        row["badges_left"] = len(VALID_BADGES) - len(row["badges"].split(","))
+    else:
+        row["badges_left"] = 4
 
 header = ["Name", "Badges", "Badges left count"]
 df = pd.DataFrame.from_dict(rows)
