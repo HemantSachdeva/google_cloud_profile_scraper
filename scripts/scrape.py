@@ -1,4 +1,3 @@
-from dataclasses import replace
 from re import sub
 
 import pandas as pd
@@ -34,7 +33,9 @@ for row in data.itertuples():
 for row in rows:
     # remove trailing comma with a space
     row["badges"] = sub(pattern=", $", repl="", string=row["badges"])
+    # count of badges to be earned yet
+    row["badges_left"] = len(VALID_BADGES) - len(row["badges"].split(","))
 
-header = ["Name", "Badges"]
+header = ["Name", "Badges", "Badges left count"]
 df = pd.DataFrame.from_dict(rows)
 df.to_csv(path_or_buf="data/output.csv", header=header)
