@@ -5,6 +5,13 @@ from bs4 import BeautifulSoup
 data = pd.read_csv("data/input.csv")
 rows = []
 
+VALID_BADGES = [
+    "Google Cloud Essentials",
+    "Flutter Essentials",
+    "Flutter Development",
+    "Dart Essentials"
+]
+
 for row in data.itertuples():
     name = row.name
     profile_url = row.profile_url
@@ -16,7 +23,8 @@ for row in data.itertuples():
     d = {"name": name, "badges": ""}
     for index, item in enumerate(badges):
         title = badges[index].getText().replace("\n", "")
-        d["badges"] += f"{title}, "
+        if title in VALID_BADGES:
+            d["badges"] += f"{title}, "
 
     rows.append(d)
 
