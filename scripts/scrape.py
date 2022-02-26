@@ -22,7 +22,7 @@ for row in data.itertuples():
 
     badges = soup.select(".ql-subhead-1")
 
-    d = {"name": name, "badges": ""}
+    d = {"name": name, "badges": "", "profile": profile_url}
     for index, item in enumerate(badges):
         title = badges[index].getText().replace("\n", "")
         if title in VALID_BADGES:
@@ -39,6 +39,6 @@ for row in rows:
     else:
         row["badges_left"] = 4
 
-header = ["Name", "Badges", "Badges left count"]
+header = ["Name", "Badges", "Profile URL", "Badges Left"]
 df = pd.DataFrame.from_dict(rows)
 df.to_csv(path_or_buf="data/output.csv", header=header)
